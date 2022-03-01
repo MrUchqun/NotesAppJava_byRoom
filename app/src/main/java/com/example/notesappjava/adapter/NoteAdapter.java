@@ -54,16 +54,16 @@ public class NoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((NoteViewHolder) holder).tvDate.setText(note.getDate());
             ((NoteViewHolder) holder).tvText.setText(note.getText());
 
-            if (note.isRead())
-                ((NoteViewHolder) holder).ivPoint.setVisibility(View.INVISIBLE);
-
-            ((NoteViewHolder) holder).tvText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    note.setRead(true);
-                    changeNote(note);
-                }
-            });
+//            if (note.isRead())
+//                ((NoteViewHolder) holder).ivPoint.setVisibility(View.INVISIBLE);
+//
+//            ((NoteViewHolder) holder).tvText.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    note.setRead(true);
+//                    changeNote(note);
+//                }
+//            });
         }
     }
 
