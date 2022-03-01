@@ -1,0 +1,19 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    //FAIL_ON_PROJECT_REPOS change to PREFER_SETTINGS
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "NotesAppJava"
+include ':app'
