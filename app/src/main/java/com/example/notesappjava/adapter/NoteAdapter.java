@@ -1,6 +1,7 @@
 package com.example.notesappjava.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,32 +13,30 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notesappjava.R;
-import com.example.notesappjava.manager.RealmManager;
+import com.example.notesappjava.database.NoteRepository;
+import com.example.notesappjava.manager.RoomManager;
 import com.example.notesappjava.model.Note;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
-    ArrayList<Note> notes;
-    RealmManager realmManager = RealmManager.getInstance();
+    List<Note> notes;
+    NoteRepository noteRepository;
 
-    public NoteAdapter(Context context, ArrayList<Note> notes) {
+    public NoteAdapter(Activity context, List<Note> notes) {
         this.context = context;
         this.notes = notes;
+        noteRepository = new NoteRepository(context.getApplication());
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void addNote(Note note) {
         notes.add(note);
-        realmManager.saveNote(note);
+        noteRepository.saveNote(note);
         notifyDataSetChanged();
-    }
-
-    public void changeNote(Note note) {
-        notes.remove(note);
-        addNote(note);
     }
 
     @NonNull
@@ -54,16 +53,16 @@ public class NoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((NoteViewHolder) holder).tvDate.setText(note.getDate());
             ((NoteViewHolder) holder).tvText.setText(note.getText());
 
-//            if (note.isRead())
-//                ((NoteViewHolder) holder).ivPoint.setVisibility(View.INVISIBLE);
-//
-//            ((NoteViewHolder) holder).tvText.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    note.setRead(true);
-//                    changeNote(note);
-//                }
-//            });
+            if (note.isRead())
+                ((NoteViewHolder) holder).ivPoint.setVisibility(View.INVISIBLE);
+
+            ((NoteViewHolder) holder).tvText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((NoteViewHolder) holder).ivPoint.setVisibility(View.INVISIBLE);
+                    noteRepository.updateNote(note.getId(), true);
+                }
+            });
         }
     }
 

@@ -4,18 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.notesappjava.R;
 import com.example.notesappjava.adapter.NoteAdapter;
-import com.example.notesappjava.database.UserRepository;
+import com.example.notesappjava.database.NoteRepository;
 import com.example.notesappjava.fragment.NoteFragment;
-import com.example.notesappjava.manager.RealmManager;
+import com.example.notesappjava.manager.RoomManager;
 import com.example.notesappjava.model.Note;
-import com.example.notesappjava.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private NoteAdapter noteAdapter;
-    private RealmManager realmManager;
+    private NoteRepository noteRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        realmManager = RealmManager.getInstance();
+        noteRepository = new NoteRepository(getApplication());
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
         noteAdapter = new NoteAdapter(this, getNotes());
         recyclerView.setAdapter(noteAdapter);
 
@@ -45,17 +43,9 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                callDialog();
-                roomDatabase();
+                callDialog();
             }
         });
-    }
-
-    void roomDatabase() {
-        UserRepository repository = new UserRepository(getApplication());
-        User user = new User(2, "Bekhruzbek");
-//        repository.saveUser(user);
-        new UserAsyncTask(repository).execute(user);
     }
 
     private void callDialog() {
@@ -63,30 +53,7 @@ public class MainActivity extends AppCompatActivity {
         noteFragment.show(getSupportFragmentManager(), null);
     }
 
-    private ArrayList<Note> getNotes() {
-        return realmManager.loadNotes();
+    private List<Note> getNotes() {
+        return noteRepository.getNotes();
     }
-
-
-    class UserAsyncTask extends AsyncTask<User, Void, List<User>> {
-
-        UserRepository repository;
-
-        UserAsyncTask(UserRepository repository) {
-            this.repository = repository;
-        }
-
-        @Override
-        protected List<User> doInBackground(User... users) {
-            repository.saveUser(users[0]);
-            return repository.getUsers();
-        }
-
-        @Override
-        protected void onPostExecute(List<User> users) {
-            super.onPostExecute(users);
-            Log.d("@@@", "onPostExecute: " + users.size());
-        }
-    }
-
 }

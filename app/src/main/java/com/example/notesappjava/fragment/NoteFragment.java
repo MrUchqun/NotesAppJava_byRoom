@@ -15,7 +15,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.notesappjava.R;
 import com.example.notesappjava.adapter.NoteAdapter;
-import com.example.notesappjava.manager.RealmManager;
 import com.example.notesappjava.model.Note;
 
 import java.text.SimpleDateFormat;
@@ -72,6 +71,6 @@ public class NoteFragment extends DialogFragment {
         Date date = Calendar.getInstance().getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateText = dateFormat.format(date);
-        return new Note(date.toString(), dateText, text);
+        return new Note(dateText, text);
     }
 }

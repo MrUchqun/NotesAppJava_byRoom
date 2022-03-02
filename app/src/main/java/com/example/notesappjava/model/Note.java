@@ -1,39 +1,41 @@
 package com.example.notesappjava.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+@Entity(tableName = "note_table")
+public class Note {
 
-public class Note extends RealmObject {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
-    @PrimaryKey
-    private String id;
-    private String text;
+    @ColumnInfo(name = "date_column")
     private String date;
+
+    private String text;
     public boolean isRead = false;
 
     public Note() {
     }
 
-    public Note(String id, String date, String text) {
-        this.id = id;
+    public Note(String date, String text) {
         this.date = date;
         this.text = text;
     }
 
-    public Note(String id, String text, String date, boolean isRead) {
-        this.id = id;
+    public Note(String text, String date, boolean isRead) {
         this.text = text;
         this.date = date;
         this.isRead = isRead;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -59,15 +61,5 @@ public class Note extends RealmObject {
 
     public void setRead(boolean read) {
         this.isRead = read;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Note{" +
-                "date='" + date + '\'' +
-                ", text='" + text + '\'' +
-                ", isRead=" + isRead +
-                '}';
     }
 }
